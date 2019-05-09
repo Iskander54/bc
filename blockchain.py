@@ -37,6 +37,8 @@ class Blockchain:
 
     def get_open_transactions(self):
         return self.__open_transactions[:]
+
+        
     def load_data(self):
         try:
             with open('blockchain-{}.txt'.format(self.node_id)
