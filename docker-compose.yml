@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  test:
+    image: eeacms/pylint:latest
+    volumes: 
+    - /Users/atl1/Desktop/bc/:/bc
+    entrypoint:
+    - pylint
+    command:
+    - /bc/wallet.py
