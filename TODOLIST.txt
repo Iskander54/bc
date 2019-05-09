@@ -1,0 +1,9 @@
+Improve Error Handling
+Improve Scalability 
+Improve broadcasting with async programming and/or scheduling
+Control mining difficulty
+Add a merkle tree for transaction Validation
+---
+Dive into the Bitcoin Code: https://github.com/bitcoin/bitcoin
+Another, simpler Python Blockchain: https://github.com/adilmoujahid/blockchain-python-tutorial
+More about the Merkle Tree: https://bitcoin.stackexchange.com/questions/10479/what-is-the-merkle-root
