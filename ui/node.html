@@ -69,6 +69,12 @@
                         <li class="nav-item">
                             <a class="nav-link " href="/network">Network</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="/login">Login</a>
+                        </li>
+                        <li>
+                            <a class="btn btn-default " href="/downloadbc"><button>Download</button></a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -139,13 +145,18 @@
                         <li class="nav-item">
                             <a class="nav-link" :class="{active: view === 'tx'}" href="#" @click="view = 'tx'">Open Transactions</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" :class="{active: view === 'DB'}" href="#" @click="view = 'DB'">Download Blockchain</a>
+                        </li>
                     </ul>
                 </div>
             </div>
             <div class="row my-3">
                 <div class="col">
+                        
                     <button class="btn btn-primary" @click="onLoadData">{{ view === 'chain' ? 'Load Blockchain' : 'Load Transactions' }}</button>
                     <button v-if="view === 'chain' && wallet" class="btn btn-success" @click="onMine">Mine Coins</button>
+                    <button v-if="view === 'DB'" class="btn btn-success" @click="onDownloadBc">Download Blockchain</button>
                     <button v-if="view === 'chain' && wallet" class="btn btn-warning" @click="onResolve">Resolve Conflicts</button>
                 </div>
             </div>
@@ -356,6 +367,26 @@
                                 vm.error = 'Something went wrong.'
                             });
                     }
+                },
+                onDownloadBc: function(){
+                    axios.get('/downloadbc')
+                    .then(function (response) {
+                        console.log(response)
+                        const url = window.URL.createObjectURL(new Blob([response]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', response.data);
+                        document.body.appendChild(link);
+                        link.click();
+                        //let blob = new Blob([response.data], { type: 'application/pdf' }),
+                        //url = window.URL.createObjectURL(blob)
+                        //window.open(url) // Mostly the same, I was just experimenting with different approaches, tried link.click, iframe and other solutions
+                           // })
+                            //.catch(function (error) {
+                              //  vm.dataLoading = false
+                                //vm.error = 'Something went wrong.'
+                            });
+                    
                 }
             }
         })

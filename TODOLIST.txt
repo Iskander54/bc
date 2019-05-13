@@ -3,6 +3,11 @@ Improve Scalability
 Improve broadcasting with async programming and/or scheduling
 Control mining difficulty
 Add a merkle tree for transaction Validation
+db User
+search engine among blockchain
+dl blockchain
+unit test
+CI or testing (static/dynamic analyser)
 ---
 Dive into the Bitcoin Code: https://github.com/bitcoin/bitcoin
 Another, simpler Python Blockchain: https://github.com/adilmoujahid/blockchain-python-tutorial
