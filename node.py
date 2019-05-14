@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request,send_from_directory
+from flask import Flask, jsonify, request,send_from_directory,send_file
 from wallet import Wallet
 from flask_cors import CORS 
 from blockchain import Blockchain
@@ -272,6 +272,14 @@ def get_nodes():
 
     }
     return jsonify(response),200
+
+@app.route('/downloadbc',methods=['GET'])
+def get_bc():
+    return send_file('/home/alexlo/NIST/bc/blockchain-5555.txt',attachment_filename='blockchain-5555.txt')
+
+@app.route('/dlbc',methods=['GET'])
+def get_bcc():
+    return send_from_directory('/home/alexlo/NIST/bc/',filename='blockchain-5555.txt',as_attachment=True)
 
 
 if __name__ == '__main__':
