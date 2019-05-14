@@ -2,6 +2,7 @@ from flask import Flask,  jsonify,  request, send_from_directory
 from wallet import Wallet
 from flask_cors import CORS 
 from blockchain import Blockchain
+from search import Search
 
 app = Flask(__name__)
 CORS(app)
@@ -35,6 +36,7 @@ def create_keys():
             'message':' Saving the keys failed.'
         }
         return jsonify(response), 500
+
 @app.route('/wallet', methods=['GET'])
 def load_keys():
     if wallet.load_keys():
@@ -279,9 +281,23 @@ def get_nodes():
 
 @app.route('/downloadbc', methods=['GET'])
 def download():
-    #uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
-    #return send_from_directory('/Users/atl1/Desktop/bc/blockchain', filename='blockchain-5555.txt',as_attachment=True)
     return send_from_directory(app.root_path+'/blockchain/blockchain-5555.txt',as_attachment=True)
+
+
+@app.route('/search/<searching>',methods=['GET'])
+def search(searching):
+    if searching == '' or searching == None:
+        response = {
+            'message': 'Input not attached.'
+        }
+        return jsonify(response), 400
+    chain_snapshot=blockchain.chain
+    dict_chain = [block.__dict__.copy() for block in chain_snapshot]
+    for dict_block in dict_chain:
+        dict_block['transactions']=[tx.__dict__ for tx in dict_block['transactions']]
+    amount=Search.setup(dict_chain,searching)
+    return jsonify(amount),200
+    
 
 
 if __name__ == '__main__':

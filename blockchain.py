@@ -72,7 +72,7 @@ class Blockchain:
 
     def save_data(self):
         try :
-            with open('{}blockchain-{}.txt'.format(blockchain,self.node_id),mode='w') as f:
+            with open('{}blockchain-{}.txt'.format('blockchain/',self.node_id),mode='w') as f:
                 saveable_chain = [block.__dict__.copy() for block in [Block(block_el.index, block_el.previous_hash, [tx.__dict__ for tx in block_el.transactions],block_el.proof,block_el.timestamp) for block_el in self.__chain]]
                 f.write(json.dumps(saveable_chain))
                 f.write('\n')
