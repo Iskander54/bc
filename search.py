@@ -16,15 +16,17 @@ def get_miner(block):
             return tx['recipient']
 def dosearch(amount,sender,recipient,time,chaine):
     tmp=[]
-    if(sender==''):
+    if(sender==None):
         pass
     else:
         for block in chaine:
             for tx in block['transactions']:
                 if(tx['sender'].lower()==sender.lower()):
                     tmp.append(Search(block['index'],tx,get_miner(block),timestamp_to_date(block['timestamp'])))
+        if tmp==[]:
+            return tmp
 
-    if(recipient==''):
+    if(recipient==None):
         pass
     else:
         if(len(tmp)>0):
@@ -33,13 +35,18 @@ def dosearch(amount,sender,recipient,time,chaine):
             for block in tmpt:
                     if(block.transaction['recipient'].lower()==recipient.lower()):
                         tmp.append(Search(block.block_index,block.transaction,block.miner,block.timestamp))
+            if tmp==[]:
+                return tmp
+
         else:
             for block in chaine:
                 for tx in block['transactions']:
                     if(tx['recipient'].lower()==recipient.lower()):
                         tmp.append(Search(block['index'],tx,get_miner(block),timestamp_to_date(block['timestamp'])))
+            if tmp==[]:
+                return tmp
     
-    if(amount==''):
+    if(amount==None):
         pass
     else:
         if(len(tmp)>0):
@@ -48,6 +55,8 @@ def dosearch(amount,sender,recipient,time,chaine):
             for block in tmpt:
                 if(float(block.transaction['amount'])==float(amount)):
                     tmp.append(Search(block.block_index,block.transaction,block.miner,block.timestamp))
+            if tmp==[]:
+                return tmp
         else:
             for block in chaine:
                 for tx in block['transactions']:
@@ -66,16 +75,12 @@ class Search():
 
 
 
-    def setup(chaine,searching):
+    def setup(chaine,recipient,amount,sender,time):
         """ Function that search tx in the blockchain """
-        searching=searching.split(',')
-        print(searching)
-        amount='' if searching[0]=='' else float(searching[0])
-        sender=searching[1]
-        recipient=searching[2]
-        time=searching[3]
+        amount=None if amount==None else float(amount)
         founds=[]
         founds=dosearch(amount,sender,recipient,time,chaine)
+        founds=founds.__dict__
         founds =[f.__dict__ for f in founds]
         """
         for search in founds:

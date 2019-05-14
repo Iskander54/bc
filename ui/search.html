@@ -39,19 +39,18 @@
             <hr>
             <div class="row">
                 <div class="col">
-                    <form @submit.prevent="onAddNode">
+                    <form @submit.prevent="onSearchTx">
                         <div class="form-group">
-                            <label for="node-url">Searching Transaction</label>
-                            <select id="Search">
-                                    <option value="volvo">Sender</option>
-                                    <option value="saab">Recipient</option>
-                                    <option value="opel">Amount</option>
-                                    <option value="audi">Date</option>
-                                  </select>
-                                    
-                            <input v-model="newNodeUrl" type="text" class="form-control" id="node-url" placeholder="localhost:5001">
+                            <label for="sender-url">Sender</label>   
+                            <input v-model="search.sender" type="text" class="form-control" id="sender-url" placeholder="Not case sensitive">
+                            <label for="recipient-url">Recipient</label>
+                            <input v-model="search.recipient" type="text" class="form-control" id="recipient-url" placeholder="Not case sensitive">
+                            <label for="amount-url">Amount</label>
+                            <input v-model="search.amount" type="text" class="form-control" id="amount-url" placeholder="Not case sensitive">
+                            <label for="date-url">Date</label>
+                            <input v-model="search.date" type="text" class="form-control" id="date-url" placeholder="AAAAMMDD">
                         </div>
-                        <button :disabled="newNodeUrl.trim() === ''" type="submit" class="btn btn-primary">Search</button>
+                        <button :disabled="search.sender.trim() === ''" type="submit" class="btn btn-primary">Search</button>
                     </form>
                 </div>
             </div>
@@ -65,11 +64,11 @@
                 <div class="col">
                     <ul class="list-group">
                         <button 
-                            v-for="node in nodes"
+                            v-for="tx in transactions"
                             style="cursor: pointer;" 
                             class="list-group-item list-group-item-action" 
                             @click="onRemoveNode(node)">
-                            {{ node }} (click to delete)
+                            {{ data.recipient }}
                         </button>
                     </ul>
                 </div>
@@ -83,35 +82,45 @@
         new Vue({
             el: '#app',
             data: {
-                nodes: [
+                transactions: [
                 ],
+                search:{
+                    sender:'',
+                recipient:'',
+                amount:'',
+                date:''
+                },
                 newNodeUrl: '',
                 error: null,
                 success: null
             },
             methods: {
-                onAddNode: function() {
+                onSearchTx: function() {
                     // Add node as peer node to local node server
-                    vm = this;
-                    axios.post('/node',{node: this.newNodeUrl})
-                        .then(function(response){
-                            vm.success= 'Stored node successfully';
-                            vm.error=null;
-                            vm.nodes=response.data.all_nodes
+                    // vm = this;
+                    const queryString = Object.keys(this.search).map(key=>key+'='+this.search[key]).join('&')
+                    console.log(queryString)
+                    axios.get('/search?recipient=yann')
+                        .then(response => {
+                            this.success= 'Found';
+                            this.error=null;
+                            console.log(response.data.transaction)
+                            this.transactions=response.data.transaction
                         })
-                        .catch(function(error){
-                            vm.success=null;
-                            vm.error=error.response.data.message;
+                        .catch(error => {
+                            this.success=null;
+                            this.error=error.response.data.message;
                         })
                 },
                 onLoadNodes: function() {
                     // Load all peer nodes of the local node server
                     vm = this;
-                    axios.get('/node')
+                    axios.get('/search?recipient=yann')
                         .then(function(response){
                             vm.success= 'Fetched nodes successfully';
                             vm.error=null;
-                            vm.nodes=response.data.all_nodes
+                            console.log(response.data.message)
+                            //vm.nodes=response.data.all_nodes
                         })
                         .catch(function(error){
                             vm.success=null;
@@ -125,7 +134,7 @@
                         .then(function(response){
                             vm.success= 'Deleted node successfully';
                             vm.error=null;
-                            vm.nodes=response.data.all_nodes
+                            //vm.nodes=response.data.all_nodes
                         })
                         .catch(function(error){
                             vm.success=null;

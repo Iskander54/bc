@@ -19,6 +19,10 @@ def get_network_ui():
 def get_login_ui():
     return send_from_directory('ui', 'login.html')
 
+@app.route('/search', methods=['GET'])
+def get_search_ui():
+    return send_from_directory('ui', 'search.html')
+
 @app.route('/wallet', methods=['POST'])
 def create_keys():
     wallet.create_keys()
@@ -284,19 +288,38 @@ def download():
     return send_from_directory(app.root_path+'/blockchain/blockchain-5555.txt',as_attachment=True)
 
 
-@app.route('/search/<searching>',methods=['GET'])
-def search(searching):
+@app.route('/search',methods=['GET'])
+def search():
+    print('SAlut')
+    '''
     if searching == '' or searching == None:
         response = {
             'message': 'Input not attached.'
         }
-        return jsonify(response), 400
+        return jsonify(response), 400'''
+    recipient=request.args.get('recipient')
+    amount=request.args.get('amount')
+    sender=request.args.get('sender')
+    time=request.args.get('time')
+    print('----')
+    print(recipient)
+    print('----')
     chain_snapshot=blockchain.chain
     dict_chain = [block.__dict__.copy() for block in chain_snapshot]
     for dict_block in dict_chain:
         dict_block['transactions']=[tx.__dict__ for tx in dict_block['transactions']]
-    amount=Search.setup(dict_chain,searching)
-    return jsonify(amount),200
+    founds=Search.setup(dict_chain,recipient,amount,sender,time)
+    if (len(founds)==0):
+        response ={
+            'message' : 'No transaction found'
+        }
+        return jsonify(response),400
+    else:
+        response ={
+            'message' : 'Transactions founds',
+            'transaction': founds
+        }
+        return jsonify(response),200
     
 
 @app.route('/downloadbc',methods=['GET'])
