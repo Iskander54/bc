@@ -23,12 +23,12 @@ class Verification:
         return True
 
     @classmethod
-    def verify_transactions(cls,open_transactions,get_balance):
+    def verify_transactions(cls, open_transactions, get_balance):
         """Verifies all open transactions."""
         return all([cls.verify_transaction(tx,get_balance) for tx in open_transactions])
 
     @staticmethod
-    def verify_transaction(transaction,get_balance,check_funds=True):
+    def verify_transaction(transaction, get_balance, check_funds=True):
         """Verify a transaction by checking whether the sender has sufficient coins.
 
         Arguments:

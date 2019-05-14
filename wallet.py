@@ -19,7 +19,7 @@ class Wallet:
     def save_keys(self):
         if self.public_key != None and self.private_key != None :
             try: 
-                with open('wallet-{}.txt'.format(self.node_id),mode='w') as f:
+                with open('{}wallet-{}.txt'.format('wallet/',self.node_id),mode='w') as f:
                     f.write(self.public_key)
                     f.write('\n')
                     f.write(self.private_key)
@@ -29,8 +29,10 @@ class Wallet:
                 return False
     
     def load_keys(self):
-        try :  
-            with open('wallet-{}.txt'.format(self.node_id),mode='r') as f:
+        print('{}wallet-{}.txt'.format('/wallet/',self.node_id))
+        try:  
+            with open('{}wallet-{}.txt'.format('wallet/',self.node_id),mode='r') as f:
+                print (f)
                 keys = f.readlines()
                 public_key = keys[0][:-1]
                 private_key = keys[1]
@@ -51,6 +53,7 @@ class Wallet:
         h = SHA256.new((str(sender)+str(recipient)+str(amount)).encode('utf8'))
         signature = signer.sign(h)
         return binascii.hexlify(signature).decode('ascii')
+        
     @staticmethod
     def verify_transaction(transaction):
         public_key=RSA.importKey(binascii.unhexlify(transaction.sender))

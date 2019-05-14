@@ -10,5 +10,11 @@
     "python.unitTest.pyTestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,
     "python.unitTest.unittestEnabled": true,
+<<<<<<< HEAD
     "python.linting.enabled": true
+=======
+    "python.linting.pylintCategorySeverity.warning": "Information",
+    "python.linting.pylintCategorySeverity.refactor": "Information",
+    "python.linting.enabled": false
+>>>>>>> b16df6a10f313a56b64e88b96b36085b56627da0
 }

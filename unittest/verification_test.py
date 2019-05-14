@@ -1,15 +1,15 @@
 from os.path import dirname, abspath
 import sys
 sys.path.insert(0,dirname(dirname(abspath(__file__))))
-from transaction import Transaction
+from verification import Verification
 import unittest
 
-class TransactionTest(unittest.TestCase):
+class VerificationTest(unittest.TestCase):
 
     def setUp(self):
         self.transaction = Transaction('Alex','Yann','signature',15)
 
-    def test_dict(self):
+    def test_verify_transaction(self):
         tx=self.transaction.to_ordered_dict()
         self.assertIsInstance(tx,dict)
 
