@@ -300,10 +300,8 @@ def search():
     recipient=request.args.get('recipient')
     amount=request.args.get('amount')
     sender=request.args.get('sender')
-    time=request.args.get('time')
-    print('----')
+    time=request.args.get('date')
     print(recipient)
-    print('----')
     chain_snapshot=blockchain.chain
     dict_chain = [block.__dict__.copy() for block in chain_snapshot]
     for dict_block in dict_chain:
@@ -313,7 +311,7 @@ def search():
         response ={
             'message' : 'No transaction found'
         }
-        return jsonify(response),400
+        return jsonify(response),500
     else:
         response ={
             'message' : 'Transactions founds',
@@ -321,40 +319,6 @@ def search():
         }
         return jsonify(response),200
 
-@app.route('/searchs',methods=['GET'])
-def searchs():
-    print('Salut')
-    '''
-    if searching == '' or searching == None:
-        response = {
-            'message': 'Input not attached.'
-        }
-        return jsonify(response), 400'''
-    recipient=request.args.get('recipient')
-    amount=request.args.get('amount')
-    sender=request.args.get('sender')
-    time=request.args.get('time')
-    print('----')
-    print(recipient)
-    print('----')
-    chain_snapshot=blockchain.chain
-    dict_chain = [block.__dict__.copy() for block in chain_snapshot]
-    for dict_block in dict_chain:
-        dict_block['transactions']=[tx.__dict__ for tx in dict_block['transactions']]
-    founds=Search.setup(dict_chain,recipient,amount,sender,time)
-    print(type(founds))
-    if (len(founds)==0):
-        response ={
-            'message' : 'No transaction found'
-        }
-        return jsonify(response),400
-    else:
-        response ={
-            'message' : 'Transactions founds',
-            'transaction': founds
-        }
-        return jsonify(response),200
-    
 
 
 @app.route('/dlbc',methods=['GET'])

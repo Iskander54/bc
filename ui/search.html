@@ -31,8 +31,15 @@
                             <a class="nav-link" href="/">Wallet &amp; Node</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="/network">Network</a>
+                            <a class="nav-link " href="/network">Network</a>
                         </li>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active " href="/search">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="/login">Login</a>
+                    </li>
                     </ul>
                 </div>
             </div>
@@ -47,29 +54,39 @@
                             <input v-model="search.recipient" type="text" class="form-control" id="recipient-url" placeholder="Not case sensitive">
                             <label for="amount-url">Amount</label>
                             <input v-model="search.amount" type="text" class="form-control" id="amount-url" placeholder="Not case sensitive">
-                            <label for="date-url">Date</label>
+                            <label for="date-url">Date of mining</label>
                             <input v-model="search.date" type="text" class="form-control" id="date-url" placeholder="AAAAMMDD">
                         </div>
-                        <button :disabled="search.recipient.trim() === ''" type="submit" class="btn btn-primary">Search</button>
+                        <button  type="submit" class="btn btn-primary">Search</button>
                     </form>
                 </div>
             </div>
             <hr>
             <div class="row my-3">
-                <div class="col">
-                    <button class="btn btn-primary" @click="onLoadNodes">Load Peer Nodes</button>
-                </div>
             </div>
             <div class="row">
                 <div class="col">
                     <ul class="list-group">
-                        <button 
-                            v-for="tx in transactions"
-                            style="cursor: pointer;" 
-                            class="list-group-item list-group-item-action" 
-                            @click="onRemoveNode(node)">
-                            {{ data.recipient }}
-                        </button>
+                        <div v-for="tx in transactions"
+                        style="cursor: pointer;" 
+                        class="list-group-item list-group-item-action">
+                            Block Index : {{ tx.block_index }}
+                            <hr>
+                            TimeStamp : {{ tx.timestamp }}
+                            <hr>
+                            Miner : {{tx.miner}}
+                            <div class="list-group-item list-group-item-action">
+                            Transaction : 
+                            <div class="list-group-item list-group-item-action">
+                                sender : {{tx.transaction.sender}}
+                                <hr>
+                                recipient : {{tx.transaction.recipient}}
+                                <hr>
+                                amount : {{tx.transaction.amount}}
+                            </div>
+                            </div>
+                            
+                        </div>
                     </ul>
                 </div>
             </div>
@@ -98,6 +115,7 @@
                 onSearchTx: function() {
                     // Add node as peer node to local node server
                     //vm = this;
+                    this.transactions=[]
                     const queryString = Object.keys(this.search)
                     .filter(e => this.search[e]!=='')
                     .map(key=>key+'='+this.search[key]).join('&')
@@ -109,6 +127,21 @@
                     */
                     axios.get('/searching?'+queryString)
                     .then(response =>{
+                        this.transactions=response.data.transaction
+                        this.success=response.data.message+' : '+this.transactions.length
+                        this.error=null
+                    console.log(response.data.transaction)
+                    
+                    })
+                    .catch(error=>{
+                        console.log(error.response.data.message)
+                        this.error=error.response.data.message
+                        this.success=null
+
+                    })
+                    //.then(json => console.log(json))
+                    /*
+                    .then(response =>{
                             vm.success= 'Founds';
                             vm.error=null;
                             console.log(response.founds)
@@ -117,37 +150,8 @@
                         .catch(error => {
                             this.success=null;
                            // this.error=error.response.data.message;
-                        })
+                        })*/
                         
-                },
-                onLoadNodes: function() {
-                    // Load all peer nodes of the local node server
-                    vm = this;
-                    axios.get('/search?recipient=yann')
-                        .then(function(response){
-                            vm.success= 'Fetched nodes successfully';
-                            vm.error=null;
-                            console.log(response.data.message)
-                            vm.transactions=response.data.message
-                        })
-                        .catch(function(error){
-                            vm.success=null;
-                            vm.error=error.response.data.message;
-                        })
-                },
-                onRemoveNode: function(node_url) {
-                    // Remove node as a peer node
-                    vm = this;
-                    axios.delete('/node/'+node_url)
-                        .then(function(response){
-                            vm.success= 'Deleted node successfully';
-                            vm.error=null;
-                            //vm.nodes=response.data.all_nodes
-                        })
-                        .catch(function(error){
-                            vm.success=null;
-                            vm.error=error.response.data.message;
-                        })
                 }
             }
         })
