@@ -50,7 +50,7 @@
                             <label for="date-url">Date</label>
                             <input v-model="search.date" type="text" class="form-control" id="date-url" placeholder="AAAAMMDD">
                         </div>
-                        <button :disabled="search.sender.trim() === ''" type="submit" class="btn btn-primary">Search</button>
+                        <button :disabled="search.recipient.trim() === ''" type="submit" class="btn btn-primary">Search</button>
                     </form>
                 </div>
             </div>
@@ -97,20 +97,28 @@
             methods: {
                 onSearchTx: function() {
                     // Add node as peer node to local node server
-                    // vm = this;
-                    const queryString = Object.keys(this.search).map(key=>key+'='+this.search[key]).join('&')
+                    //vm = this;
+                    const queryString = Object.keys(this.search)
+                    .filter(e => this.search[e]!=='')
+                    .map(key=>key+'='+this.search[key]).join('&')
                     console.log(queryString)
-                    axios.get('/search?recipient=yann')
-                        .then(response => {
-                            this.success= 'Found';
-                            this.error=null;
-                            console.log(response.data.transaction)
-                            this.transactions=response.data.transaction
+                    /*
+                    fetch('/searching?'+queryString)
+                    .then(response => response.json())
+                    .then(json => console.log(json))
+                    */
+                    axios.get('/searching?'+queryString)
+                    .then(response =>{
+                            vm.success= 'Founds';
+                            vm.error=null;
+                            console.log(response.founds)
+                            //vm.transactions=response.data.message
                         })
                         .catch(error => {
                             this.success=null;
-                            this.error=error.response.data.message;
+                           // this.error=error.response.data.message;
                         })
+                        
                 },
                 onLoadNodes: function() {
                     // Load all peer nodes of the local node server
@@ -120,7 +128,7 @@
                             vm.success= 'Fetched nodes successfully';
                             vm.error=null;
                             console.log(response.data.message)
-                            //vm.nodes=response.data.all_nodes
+                            vm.transactions=response.data.message
                         })
                         .catch(function(error){
                             vm.success=null;

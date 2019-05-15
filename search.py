@@ -80,7 +80,6 @@ class Search():
         amount=None if amount==None else float(amount)
         founds=[]
         founds=dosearch(amount,sender,recipient,time,chaine)
-        founds=founds.__dict__
         founds =[f.__dict__ for f in founds]
         """
         for search in founds:
