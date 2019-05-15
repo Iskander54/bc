@@ -285,7 +285,7 @@ def get_nodes():
 
 @app.route('/downloadbc', methods=['GET'])
 def download():
-    return send_from_directory(app.root_path+'/blockchain/blockchain-5555.txt',as_attachment=True)
+    return send_from_directory(app.root_path+'/blockchain/','blockchain-5555.txt',as_attachment=True)
 
 
 @app.route('/sandbox',methods=['GET'])
