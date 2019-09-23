@@ -16,15 +16,15 @@ You can then go to your browser and type localhost:/5555 to have access to all t
 ## UI
 The UI is made using vueJS
 
-##Blockchain
+## Blockchain
 In this project, we managed all this issue regarding blockchaim :
-    * chain of data
-    * Mine new blocks
-    * Block hashing
-    * Analyze and Verify the chain
-    * Transactions
-    * Search engine for transactions 
-    * Store Chain to Disk
-    * Node Network
-    * Share data and resolve conflicts
-    * Wallets
+* chain of data
+* Mine new blocks
+* Block hashing
+* Analyze and Verify the chain
+* Transactions
+* Search engine for transactions 
+* Store Chain to Disk
+* Node Network
+* Share data and resolve conflicts
+* Wallets
