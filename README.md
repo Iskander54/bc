@@ -9,8 +9,8 @@ You will need to create/import the env/pycoin.yml environment in Anaconda to lau
 ## Getting started
 This section explains you how to run the website and set the database.
 ### Setup
-To launch the App, you need to set up conda by typing [conda activate 'your env']. and then [python node.py].
-You can then go to your browser and type localhost:/5555 to have access to all the featuers of this project.
+To launch the App, you need to set up conda by typing `conda activate 'your env'`. and then [python node.py].
+You can then go to your browser and type localhost:5555 to have access to all the featuers of this project.
 
 
 ## UI
